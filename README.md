@@ -1,7 +1,5 @@
 # Autonova-AI-Folder-Organizer
 Autonova-AI-Folder-Organizer
-
-
 # AI Smart Folder Organizer - Project Plan
 
 ## 1. 專案目標 (Project Goal)
@@ -45,6 +43,8 @@ Autonova-AI-Folder-Organizer
 | 圖片 (JPG, PNG, WebP, GIF, BMP, SVG) | ✅ | 原生渲染 + `sharp` 縮圖 |
 | PSD (Photoshop) | ✅ | `psd` 套件解析合成圖 + 快取 |
 | PDF | ✅ | `pdfjs-dist` + `canvas` 渲染多頁網格 |
+| AI (Adobe Illustrator) | ✅ | 複用 PDF 預覽（AI 檔案內嵌 PDF） |
+| PPT/PPTX (PowerPoint) | ✅ | LibreOffice 轉 PDF 渲染 / 嵌入縮圖 |
 | DWG/DXF (AutoCAD) | ✅ | 外掛 LibreDWG 轉 SVG + 快取 |
 | Blender (.blend) | ✅ | 嵌入縮圖提取 + HQ 背景渲染 |
 | Office (DOC/DOCX) | ✅ | `mammoth` + `word-extractor` + `officeparser` |
@@ -52,6 +52,8 @@ Autonova-AI-Folder-Organizer
 | 文本 (TXT, JSON, MD, Code) | ✅ | 原生讀取 + 截斷顯示 |
 | 壓縮檔 (ZIP, 7Z, RAR) | ✅ | `node-7z` + `node-unrar-js` |
 | 影片 (MP4, MKV, AVI, MOV...) | ✅ | FFmpeg 9 帧截圖 + 3×3 網格 |
+| 3D 模型 (GLB, GLTF, FBX, OBJ, STL) | ✅ | Three.js + OrbitControls |
+| 紋理 (DDS, KTX2, EXR, HDR) | ✅ | Three.js Texture Loaders |
 
 ### B. AI 多模態分析 (Multimodal AI Analysis)
 | 功能 | 狀態 | 技術實現 |
@@ -102,6 +104,7 @@ Autonova-AI-Folder-Organizer
 | 編碼轉換 | `iconv-lite` | MIT |
 | EXIF 讀取 | `exifr` | MIT |
 | PNG 處理 | `pngjs` | MIT |
+| 3D 渲染 | `three` | MIT |
 
 ### AI 與網路
 | 功能 | 技術 |
@@ -133,47 +136,61 @@ Autonova-AI-Folder-Organizer
 14. ✅ 資料夾預設組 (保存、載入、切換配置)。
 15. ✅ 檔案樹內拖放移動 (支援多選，資料夾懸停高亮)。
 16. ✅ 檔案樹增強篩選 (支援篩選已展開子目錄內容)。
-15. ✅ 智能選取建議 (偵測同名不同副檔名、連號檔案)，提供一鍵全選。
-16. ✅ 左側檔案樹優化 (系統資料夾快捷鍵、內聯重命名、自動滾動)。
-17. ✅ 背景預覽加載 (PDF, PSD, DWG, Blend) 與記憶體快取優化。
-18. ✅ ADS 元數據讀取效能優化 (Native Node.js fs)。
-19. ✅ 目標資料夾面板增強 (一鍵清空、未保存修改提示)。
-20. ✅ 預覽快取自動管理 (旋轉/移動/重命名時自動清除過期快取)。
-21. ✅ AI 體驗優化 (重命名後自動重置分析狀態)。
-22. ✅ 目的地捷徑 (點擊九宮格圖示可開啟目標資料夾)。
-23. ✅ 安全批量移動 (一鍵移動已標記檔案，包含 Hash 校驗與進度回饋)。
-24. ✅ UI 優化 (簡化操作按鈕，提升空間利用率)。
-25. ✅ 右側面板分區 (新增統計與工具儀表板)。
-26. ✅ 圖片轉 PDF (多選圖片自動顯示轉檔面板，自動按檔名排序)。
-27. ✅ 移除 GPL 依賴 (Poppler 改用 pdfjs-dist+canvas，LibreDWG 改為外挂模式)。
-28. ✅ 正則表達式生成改用 OpenRouter API (支援用戶自訂 Prompt 設定)。
-29. ✅ 資料夾雙擊重命名 (左側檔案樹中資料夾也可雙擊重命名)。
-30. ✅ 自訂快捷資料夾 (1-4 快捷按鈕，左鍵儲存/切換，右鍵清除)。
-31. ✅ 排序選單精簡 (移除標籤，簡化文字)。
-32. ✅ **多語言支援 (i18n)** (繁體中文、英文、日文，340+ 翻譯鍵)。
-33. ✅ **RAR 格式支援** (使用 node-unrar-js，MIT 授權可商用)。
-34. ✅ **壓縮檔解壓縮** (ZIP/7Z/RAR，支援編碼設定，原檔移入解壓資料夾)。
-35. ✅ **EXIF 資訊顯示** (拍攝日期、GPS、相機型號、曝光參數)。
-36. ✅ **付費模型警告** (批量 AI 分析按鈕懸浮提示)。
-37. ✅ **視頻預覽功能** (FFmpeg 9帧縮圖、3×3九宮格、Base64快取)。
+17. ✅ 智能選取建議 (偵測同名不同副檔名、連號檔案)，提供一鍵全選。
+18. ✅ 左側檔案樹優化 (系統資料夾快捷鍵、內聯重命名、自動滾動)。
+19. ✅ 背景預覽加載 (PDF, PSD, DWG, Blend) 與記憶體快取優化。
+20. ✅ ADS 元數據讀取效能優化 (Native Node.js fs)。
+21. ✅ 目標資料夾面板增強 (一鍵清空、未保存修改提示)。
+22. ✅ 預覽快取自動管理 (旋轉/移動/重命名時自動清除過期快取)。
+23. ✅ AI 體驗優化 (重命名後自動重置分析狀態)。
+24. ✅ 目的地捷徑 (點擊九宮格圖示可開啟目標資料夾)。
+25. ✅ 安全批量移動 (一鍵移動已標記檔案，包含 Hash 校驗與進度回饋)。
+26. ✅ UI 優化 (簡化操作按鈕，提升空間利用率)。
+27. ✅ 右側面板分區 (新增統計與工具儀表板)。
+28. ✅ 圖片轉 PDF (多選圖片自動顯示轉檔面板，自動按檔名排序)。
+29. ✅ 移除 GPL 依賴 (Poppler 改用 pdfjs-dist+canvas，LibreDWG 改為外挂模式)。
+30. ✅ 正則表達式生成改用 OpenRouter API (支援用戶自訂 Prompt 設定)。
+31. ✅ 資料夾雙擊重命名 (左側檔案樹中資料夾也可雙擊重命名)。
+32. ✅ 自訂快捷資料夾 (1-4 快捷按鈕，左鍵儲存/切換，右鍵清除)。
+33. ✅ 排序選單精簡 (移除標籤，簡化文字)。
+34. ✅ **多語言支援 (i18n)** (繁體中文、英文、日文，340+ 翻譯鍵)。
+35. ✅ **RAR 格式支援** (使用 node-unrar-js，MIT 授權可商用)。
+36. ✅ **壓縮檔解壓縮** (ZIP/7Z/RAR，支援編碼設定，原檔移入解壓資料夾)。
+37. ✅ **EXIF 資訊顯示** (拍攝日期、GPS、相機型號、曝光參數)。
+38. ✅ **付費模型警告** (批量 AI 分析按鈕懸浮提示)。
+39. ✅ **視頻預覽功能** (FFmpeg 9帧縮圖、3×3九宮格、Base64快取)。
+40. ✅ **全域檔案搜索** (搜尋整個目錄樹，中文1字/英文2字即可搜索)。
+41. ✅ **搜索偏好設定** (最大目錄/檔案/深度/結果數，跳過目錄)。
+42. ✅ **加密壓縮包解壓** (ZIP/7Z/RAR 加密格式，密碼釘選功能)。
+43. ✅ **錯誤日誌對話框** (本次執行/歷史紀錄分頁，可清除刷新)。
+44. ✅ **AI 請求超時機制** (20-30秒超時，友好錯誤訊息)。
+45. ✅ **緩存目錄隱藏** (`.autonova` + Windows 隱藏屬性)。
+46. ✅ **影片 AI 分析優化** (9帧合併3x3網格圖送分析)。
+47. ✅ **Prompt 設定優化** (「📋 使用預設」按鈕)。
+48. ✅ **確認對話框捲軸** (最大高度 80vh，美化捲軸)。
+49. ✅ **歷史記錄面板優化** (50筆記錄，美化捲軸)。
+50. ✅ **檔案衝突處理** (自動重命名/跳過/覆蓋/Smart Merge)。
+51. ✅ **PDF 快取優化** (批量 AI 分析時自動保存預覽快取)。
+52. ✅ **PPT/PPTX 預覽** (LibreOffice 轉 PDF / 嵌入縮圖)。
+53. ✅ **Word 預覽條文編號** (DOCX 轉 HTML 保留列表格式)。
+54. ✅ **目標文件夾描述快捷編輯** (Enter 保存，Esc 取消，失焦保存)。
+55. ✅ **Adobe Illustrator (.ai) 預覽** (複用 PDF 渲染邏輯)。
+56. ✅ **3D 模型預覽** (GLB/GLTF/FBX/OBJ/STL，Three.js + OrbitControls)。
+57. ✅ **紋理預覽** (DDS/KTX2/EXR/HDR，Three.js Texture Loaders)。
+58. ✅ **主題色切換** (5 種強調色，CSS 變量架構)。
 
 ## 6. 待開發功能 (TODO)
 
 ### 🚀 追加功能
-- [ ] 3D 檔案（three.js）和紋理圖檔案解碼辨識 (dds, astc, fbx)
 - [ ] 語音檔辨識
 - [ ] 圖片修改 / 繪圖
-- [ ] 多主題支援
 - [ ] 關聯多文件同時命名
 - [ ] 分享 / 列印功能
-- [ ] PPT/PPTX 檔案讀取預覽
-- [ ] Adobe Illustrator (.ai) 檔案讀取預覽
 
 ### 🐛 Bug 修復
 - [ ] CAD 檔 / 3D 檔不要 AI 分析
 - [ ] Code Review 全面檢查
 - [ ] 加入 React ErrorBoundary 機制，發生渲染錯誤時顯示友好的錯誤介面而非整頁空白
-- [ ] 目標文件夾描述修改完 Enter 或跳出就保存，Esc 則取消（不用按儲存）
 
 ### ⚡ 效能優化
 - [ ] 虛擬滾動 (react-window 或 virtuoso) 避免大文件夾崩潰
