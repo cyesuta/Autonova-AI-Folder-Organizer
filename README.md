@@ -166,9 +166,10 @@ Autonova-AI-Folder-Organizer
 - [ ] 多主題支援
 - [ ] 關聯多文件同時命名
 - [ ] 分享 / 列印功能
+- [ ] PPT/PPTX 檔案讀取預覽
+- [ ] Adobe Illustrator (.ai) 檔案讀取預覽
 
 ### 🐛 Bug 修復
-- [ ] AI 分析 PDF 時順便把快取放到 folder 內
 - [ ] CAD 檔 / 3D 檔不要 AI 分析
 - [ ] Code Review 全面檢查
 - [ ] 加入 React ErrorBoundary 機制，發生渲染錯誤時顯示友好的錯誤介面而非整頁空白
@@ -224,5 +225,6 @@ Autonova-AI-Folder-Organizer
 ### 📄 頁面與支援
 - [ ] 反饋頁面
 - [ ] DC 技術支援 / LINE 流動人口
+
 
 
