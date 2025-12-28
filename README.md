@@ -2,10 +2,12 @@
 Autonova-AI-Folder-Organizer
 
 
+# AI Smart Folder Organizer - Project Plan
+
 ## 1. 專案目標 (Project Goal)
 開發一個運行於 **Windows 10** 的本機桌面應用程式，擁有**高品質、現代化 (Premium/Beautiful)** 的 GUI。
 主要功能是協助使用者管理與分類雜亂的資料夾，結合 **AI 多模態 (Multimodal)** 能力來分析檔案內容，並提供強大的預覽功能。
-**重點要求：此程式必須為 Portable (免安裝) 版本，單一 EXE 檔案即可運行，方便攜帶與分享。**
+**發布策略：主要推廣安裝版 (支援自動更新、右鍵整合)，同時提供 Portable 版本供進階用戶使用。**
 
 ## 2. 核心介面佈局 (Layout)
 
@@ -38,52 +40,81 @@ Autonova-AI-Folder-Organizer
 ## 3. 關鍵技術功能 (Key Features)
 
 ### A. 檔案預覽 (Advanced File Preview)
-*   **基本圖片**: (✅ 已完成) 直接渲染 (JPG, PNG, WebP, GIF)。
-*   **PSD (Photoshop)**: (✅ 已完成) 使用 psd.js 解析合成圖層，支援縮放/平移，結果快取。
-*   **PDF**: (✅ 已完成) 渲染首頁或提供完整預覽 (Browser Native)。
-*   **DWG (AutoCAD)**: (✅ 已完成) 使用 LibreDWG 轉換 SVG 預覽，支援縮放、平移、反色。
-*   **Office Documents**: (✅ 已完成) DOC/DOCX (mammoth + word-extractor), XLS/XLSX (xlsx 套件)。
-*   **Text/Data**: (✅ 已完成) 支援 TXT, JSON, MD, Code。 (語法高亮、截斷顯示)
-*   **Archives (壓縮檔)**: (✅ 已完成) 使用 7zip library 讀取 header，列出內部所有檔名。
+| 格式 | 狀態 | 技術實現 |
+|------|------|----------|
+| 圖片 (JPG, PNG, WebP, GIF, BMP, SVG) | ✅ | 原生渲染 + `sharp` 縮圖 |
+| PSD (Photoshop) | ✅ | `psd` 套件解析合成圖 + 快取 |
+| PDF | ✅ | `pdfjs-dist` + `canvas` 渲染多頁網格 |
+| DWG/DXF (AutoCAD) | ✅ | 外掛 LibreDWG 轉 SVG + 快取 |
+| Blender (.blend) | ✅ | 嵌入縮圖提取 + HQ 背景渲染 |
+| Office (DOC/DOCX) | ✅ | `mammoth` + `word-extractor` + `officeparser` |
+| Office (XLS/XLSX) | ✅ | `xlsx` (SheetJS) |
+| 文本 (TXT, JSON, MD, Code) | ✅ | 原生讀取 + 截斷顯示 |
+| 壓縮檔 (ZIP, 7Z, RAR) | ✅ | `node-7z` + `node-unrar-js` |
+| 影片 (MP4, MKV, AVI, MOV...) | ✅ | FFmpeg 9 帧截圖 + 3×3 網格 |
 
-### B. AI 多模態分類 (Multimodal AI Categorization)
-*   **視覺分析 (Vision)**: (✅ 已完成) 讀取圖片/截圖內容，透過 Webhook 送往 AI 分析。
-*   **PDF 分析**: (✅ 已完成) 自動擷取 PDF 第一頁圖片送往 AI 分析。
-*   **文本分析 (Text)**: (✅ 已完成) 讀取 TXT/JSON/Code 文字內容進行語意分類。
-*   **結構分析**: (✅ 已完成) 根據壓縮檔內的檔名結構判斷用途。
-*   **AI 介面**: (✅ 已完成)
-    *   透過 n8n Webhook 串接外部 AI 模型 (如 Gemini)。
-    *   支援全域狀態管理，分析過程中可自由切換檔案。
-    *   分析結果顯示建議名稱、關鍵字、描述。
-    *   一鍵套用 AI 建議的新檔名。
+### B. AI 多模態分析 (Multimodal AI Analysis)
+| 功能 | 狀態 | 技術實現 |
+|------|------|----------|
+| 視覺分析 | ✅ | `sharp` 壓縮後送 OpenRouter API |
+| PDF 分析 | ✅ | `pdfjs-dist` 渲染首/中/末頁合併圖 |
+| 影片分析 | ✅ | 9 帧合併成 3×3 網格圖 |
+| 文本分析 | ✅ | 讀取文字內容語意分類 |
+| 壓縮檔分析 | ✅ | 根據內部檔名結構判斷用途 |
+| AI 介面 | ✅ | OpenRouter API 統一接口，支援自訂 Prompt |
+| 批量分析 | ✅ | 佇列處理 + 進度顯示 + 結果快取 |
 
 ### C. 互動體驗 (UX/Interaction)
-*   **Drag & Drop**: (✅ 已完成) 流暢的拖曳體驗，從左側或預覽區直接拖拉到右側。
-*   **Animations**: (✅ 已完成) 檔案移動時有 UI 反饋，資料夾卡片有 Hover 效果。
-*   **Glassmorphism/Dark Mode**: (✅ 已完成) 採用現代化深色玻璃擬態 UI。
+| 功能 | 狀態 | 技術實現 |
+|------|------|----------|
+| 拖放操作 | ✅ | HTML5 Drag & Drop API |
+| 動畫效果 | ✅ | `framer-motion` |
+| 深色玻璃擬態 UI | ✅ | Tailwind CSS + Glassmorphism |
+| 多語言 | ✅ | `i18next` + `react-i18next` (繁中/英/日) |
+| 鍵盤快捷鍵 | ✅ | 1-9 快速分配，0 取消 |
+| 智能選取 | ✅ | 同名/連號檔案偵測 |
+| 歷史記錄 | ✅ | 移動/重命名/刪除操作可撤銷 |
 
-## 4. 建議技術棧 (Tech Stack)
+## 4. 技術棧 (Tech Stack)
 
-為了達到「GUI 漂亮」且「本機運行」的要求，選擇 **Electron** 生態系：
+### 核心框架
+| 類別 | 技術 | 說明 |
+|------|------|------|
+| 桌面框架 | Electron 30 | 跨平台桌面應用 |
+| 前端框架 | React 18 | 組件化 UI |
+| 建置工具 | Vite 5 | 快速 HMR 開發 |
+| 語言 | TypeScript 5 | 類型安全 |
+| 樣式 | Tailwind CSS 3 | 原子化 CSS |
+| 動畫 | Framer Motion | 流暢動畫 |
+| 打包 | Electron Builder | 安裝版 + Portable |
 
-*   **App Framework**: **Electron** (跨平台桌面應用核心，支援 Windows, macOS, Linux)。
-    *   *註：雖然代碼通用，但若要產生 macOS 的 `.dmg` 或 `.app`，通常需要在 Mac 環境下進行編譯 (Build)，或使用 CI/CD (如 GitHub Actions) 進行跨平台打包。*
-*   **Frontend**: **React** + **Vite** (快速、模組化)。
-*   **Styling**: **Tailwind CSS** + **Framer Motion** (處理複雜動畫與漂亮的 UI)。
-*   **Language**: **TypeScript** (確保代碼穩固)。
-*   **Database (Optional)**: **SQLite** 或 **Lowdb** (本機儲存設定與歷史紀錄)。
-*   **AI Model**: **Google Gemini API** (Multimodal 能力強) 或 Local LLM (若需完全離線，但預覽多模態較重)。
-*   **Build System**: **Electron Builder** (configured for Portable target to generate single `.exe`).
+### 檔案處理庫
+| 格式 | 套件 | 授權 |
+|------|------|------|
+| 圖片處理 | `sharp` | Apache 2.0 |
+| PSD 解析 | `psd` | MIT |
+| PDF 渲染 | `pdfjs-dist` + `canvas` | Apache 2.0 |
+| PDF 生成 | `pdfkit` | MIT |
+| Word 解析 | `mammoth` + `word-extractor` + `officeparser` | MIT |
+| Excel 解析 | `xlsx` | Apache 2.0 |
+| 壓縮檔 | `node-7z` + `7zip-bin` + `node-unrar-js` | LGPL/MIT |
+| 影片處理 | FFmpeg (外掛) | LGPL |
+| 編碼轉換 | `iconv-lite` | MIT |
+| EXIF 讀取 | `exifr` | MIT |
+| PNG 處理 | `pngjs` | MIT |
 
-### 特定格式處理庫 (Potential Libraries)
-*   **Images**: `sharp` (高效能圖片處理/縮圖)。
-*   **PSD**: `ag-psd` 或 `psd.js` (讀取 Photoshop 縮圖)。
-*   **PDF**: `react-pdf` (預覽渲染), `pdf-parse` (抽取文字)。
-*   **Office (Word)**: `mammoth` (轉 HTML 預覽), `textract` (抽取文字)。
-*   **Office (Excel)**: `xlsx` (SheetJS) (讀取表格數據)。
-*   **OCR (Text in Images/PDF)**: `tesseract.js` (本機 OCR 引擎) 或直接利用 **Gemini Vision API** (AI 端 OCR)。
-*   **Archives**: `node-7z` (wrapper for 7zip-bin)。
-*   **DWG**: (需評估 `libre-dwg` 或其他轉換工具)。
+### AI 與網路
+| 功能 | 技術 |
+|------|------|
+| AI API | OpenRouter (支援 Gemini、Claude 等) |
+| HTTP | Electron net 模組 |
+
+### 國際化
+| 功能 | 套件 |
+|------|------|
+| i18n 核心 | `i18next` |
+| React 綁定 | `react-i18next` |
+| 支援語言 | 繁體中文、English、日本語 |
 
 ## 5. 已完成進度 (Completed)
 1.  ✅ 初始化 Electron + React + Vite + TypeScript 專案結構。
@@ -125,3 +156,73 @@ Autonova-AI-Folder-Organizer
 35. ✅ **EXIF 資訊顯示** (拍攝日期、GPS、相機型號、曝光參數)。
 36. ✅ **付費模型警告** (批量 AI 分析按鈕懸浮提示)。
 37. ✅ **視頻預覽功能** (FFmpeg 9帧縮圖、3×3九宮格、Base64快取)。
+
+## 6. 待開發功能 (TODO)
+
+### 🚀 追加功能
+- [ ] 3D 檔案（three.js）和紋理圖檔案解碼辨識 (dds, astc, fbx)
+- [ ] 語音檔辨識
+- [ ] 圖片修改 / 繪圖
+- [ ] 多主題支援
+- [ ] 關聯多文件同時命名
+- [ ] 分享 / 列印功能
+
+### 🐛 Bug 修復
+- [ ] AI 分析 PDF 時順便把快取放到 folder 內
+- [ ] CAD 檔 / 3D 檔不要 AI 分析
+- [ ] Code Review 全面檢查
+- [ ] 加入 React ErrorBoundary 機制，發生渲染錯誤時顯示友好的錯誤介面而非整頁空白
+- [ ] 目標文件夾描述修改完 Enter 或跳出就保存，Esc 則取消（不用按儲存）
+
+### ⚡ 效能優化
+- [ ] 虛擬滾動 (react-window 或 virtuoso) 避免大文件夾崩潰
+- [ ] ASAR 與 Unpack 智慧分流：在 electron-builder 配置中開啟 asar，大檔案/二進制檔踢出去
+- [ ] 避免 IPC 通道阻塞 (Serialization Cost)：大數據走 Invoke (非同步)
+- [ ] 懶加載 IPC Handlers「空閒載入」或「按需載入」
+
+### 📦 打包與發布
+- [ ] electron-builder 一次打包出安裝版和 portable 版
+
+#### 安裝版特性
+- [ ] electron-updater 無痛更新
+- [ ] 右鍵菜單整合
+- [ ] 設定殘留檔案管理
+- [ ] 快取集中管理 (Centralized Cache)：放在 appdata、各文件夾或系統暫存區，可選
+- [ ] 更新版本檢查
+
+#### Portable 版特性
+- [ ] 設定檔保存在 exe 根目錄，啟動時檢測寫入權限
+- [ ] 首次運行自動生成 Demo Folder + 教學 (driver.js 亮暗指示)
+- [ ] 依賴管理：node_modules 裁剪，考慮 webpack/vite server-side build 打包 Main Process
+- [ ] 壓縮權衡：compression: "store" 檔案最大但啟動最快
+- [ ] 快取在各文件夾或系統暫存區，可選
+
+### 💰 商業化準備
+
+#### 授權系統
+- [ ] 區別免費版功能開關 (分層授權)
+- [ ] Electron 後端邏輯辨識 product_id / variant_id
+- [ ] 建立「門神」組件 (TierGate)：等級不夠時按鈕變灰/消失/顯示鎖頭
+- [ ] 序列號系統：LemonSqueezy 採購和序列號發行
+- [ ] 序列號智慧快取驗證：本地讀取授權，定時查詢 key 是否過期
+- [ ] 升級方案按鈕和序列號系統處理
+- [ ] 模糊遮罩勾引升級（預覽區、圖表、進階設定面板）
+
+#### 保護與安全
+- [ ] 檔案名 / 作者名 / icon / logo 替換
+- [ ] 免費版加廣告
+- [ ] 打包測試依賴
+- [ ] 防止反編譯：electron-vite Bytenode (V8 Bytecode) 保護前後端主檔
+- [ ] 程式碼簽章：Certum 雲端標準版 (Standard Cloud)
+- [ ] 遙測與崩潰報告：整合 Sentry (Electron 版)
+
+### 🏆 專業版功能
+- [ ] 本地 LLM 支援
+- [ ] 分類訓練語義
+- [ ] 人臉辨識
+
+### 📄 頁面與支援
+- [ ] 反饋頁面
+- [ ] DC 技術支援 / LINE 流動人口
+
+
