@@ -4,6 +4,26 @@
 
 ## [Unreleased]
 
+## [2.7.0] - 2025-12-30
+### 新增功能
+- **🔤 字體預覽功能**:
+  - 支援 TTF、OTF、WOFF、WOFF2、EOT、TTC 字體格式
+  - 顯示字體元數據：英文名、本地化名稱（中日韓）、字形數量、版本等
+  - 展開「詳細資訊」可查看完整資訊：PostScript 名、設計師、製造商、版權
+  - 使用 `opentype.js` 解析字體元數據（MIT 許可證）
+  - 當瀏覽器 FontFace API 無法載入時，自動使用 opentype.js 回退渲染成圖片
+
+- **📋 複製圖片到剪貼簿**:
+  - 預覽面板標題列新增 📋 按鈕
+  - 支援圖片、PSD、Blender、DWG/DXF、PDF 等有快取預覽的檔案
+  - 一鍵複製預覽圖，可直接貼到聊天軟體、文檔編輯器
+
+### 技術改進
+- 新增 `electron/modules/fontPreview.ts` 模組處理字體解析和渲染
+- 新增 `src/components/FontPreview.tsx` 組件
+- 安裝 `opentype.js` 依賴用於字體解析
+- 新增 `clipboard:copyImage` IPC handler 在 main 進程複製圖片
+
 ## [2.6.0] - 2025-12-29
 ### 新增功能
 - **📖 OCR 文字辨識功能**:
